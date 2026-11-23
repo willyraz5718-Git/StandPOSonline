@@ -2,7 +2,7 @@ name: keep-alive
 
 on:
   schedule:
-    - cron: '17 8 */3 * *'
+    - cron: '0 8 */2 * *'
   workflow_dispatch:
 
 permissions:
@@ -14,11 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Requête Supabase
+      - name: Requête Supabase keep-alive
         run: |
-          curl -f -s "https://igdzdozbrdbqscuewngi.supabase.co/rest/v1/categories?select=*&limit=1" \
+          curl -f -s "https://igdzdozbrdbqscuewngi.supabase.co/rest/v1/rpc/ping_keepalive" \
+            -X POST \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json"
 
       - name: Commit pour garder le workflow actif
         run: |
